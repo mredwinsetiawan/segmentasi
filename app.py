@@ -145,11 +145,12 @@ if menu == "Home":
             rfm_avg = rfm.groupby('CustomerSegment').agg({
                 'Recency': 'mean',
                 'Frequency': 'mean',
-                'Monetary': 'mean'
+                'Monetary': 'mean',
+                'Cluster': 'first'  # Ambil cluster pertama
             }).reset_index()
 
             # Tentukan bobot berdasarkan rata-rata RFM
-            rfm_avg['RFM_Weight'] = (
+            rfm_avg['RFM_Score'] = (  # Mengubah nama kolom dari RFM_Weight ke RFM_Score
                 (1 / (rfm_avg['Recency'] + 1)) * 0.3 +  # Semakin rendah Recency, semakin tinggi bobot
                 rfm_avg['Frequency'] * 0.4 +             # Semakin tinggi Frequency, semakin tinggi bobot
                 rfm_avg['Monetary'] * 0.3                # Semakin tinggi Monetary, semakin tinggi bobot
@@ -157,12 +158,13 @@ if menu == "Home":
 
             # Menampilkan cluster
             cluster_summary = pd.DataFrame({
+                'Cluster': rfm_avg['Cluster'],  # Tambahkan kolom Cluster di sini
                 'Customer Segment': rfm_avg['CustomerSegment'],
                 'Member Count': [rfm[rfm['CustomerSegment'] == seg].shape[0] for seg in rfm_avg['CustomerSegment']],
                 'Recency (avg)': rfm_avg['Recency'],
                 'Frequency (avg)': rfm_avg['Frequency'],
                 'Monetary (avg)': rfm_avg['Monetary'],
-                'RFM Weight': rfm_avg['RFM_Weight']
+                'RFM Score': rfm_avg['RFM_Score']  # Mengubah nama kolom dari RFM_Weight ke RFM_Score
             })
 
             st.subheader('Tabel Pembobotan dan Rata-rata RFM untuk Setiap Segmen')
@@ -172,7 +174,7 @@ if menu == "Home":
 
             # Customer Segmentation by Cluster
             st.subheader('Customer Segmentation by Cluster')
-            rfm_avg_sorted = cluster_summary.sort_values(by='RFM Weight', ascending=False)
+            rfm_avg_sorted = cluster_summary.sort_values(by='RFM Score', ascending=False)  # Urutkan dari tertinggi ke terendah
 
             # Daftar treatment dan behavior untuk setiap segmen
             treatments = [
@@ -206,13 +208,9 @@ if menu == "Home":
             rfm_avg_sorted['Behavior'] = behaviors[:len(rfm_avg_sorted)]
 
             # Menampilkan tabel Customer Segmentation by Cluster
-            st.write(rfm_avg_sorted[['Customer Segment', 'Member Count', 'RFM Weight', 'Behavior', 'Treatment']])
+            st.write(rfm_avg_sorted[['Cluster', 'Customer Segment', 'Member Count', 'RFM Score', 'Behavior', 'Treatment']])
 
 #boleheditkeatas
-
-
-
-
 
             # Visualize Clusters
             st.subheader('Cluster Visualization')
@@ -237,8 +235,6 @@ if menu == "Home":
                 retensi pelanggan, loyalitas, dan keseluruhan kepuasan pelanggan.
             """)
 
-
-
 # Menu Segmentasi Pelanggan untuk melihat detail pembobotan, perilaku, dan treatment
 elif menu == "Segmentasi Pelanggan":
     st.subheader("Segmentasi Pelanggan dan Pembobotan RFM")
@@ -250,8 +246,8 @@ elif menu == "Segmentasi Pelanggan":
             'New Customers', 'Occasional Buyers', 'At-Risk Customers', 'Lost Customers', 
             'Bargain Hunters', 'Window Shoppers'
         ],
-        'RFM Weight': [
-            5.75, 4.10, 3.50, 2.85, 1.90, 1.65, 1.20, 0.85, 1.80, 0.50
+        'RFM Score': [  # Mengubah nama kolom dari RFM Weight ke RFM Score
+            5.75, 4.10, 3.50, 2.85, 1.90, 1.80, 1.65, 1.20, 0.85, 0.50
         ],
         'Behavior': [
             'Pelanggan paling berharga dan setia dengan transaksi tinggi.',
@@ -289,4 +285,3 @@ elif menu == "Segmentasi Pelanggan":
         Semakin tinggi frekuensi pembelian (Frequency) dan nilai pembelian total (Monetary), semakin tinggi bobotnya.
         Segmen dengan nilai Recency yang rendah (baru-baru ini bertransaksi) juga mendapat bobot lebih tinggi.
     """)
-
