@@ -80,7 +80,7 @@ if menu == "Home":
             # Elbow Method
             st.subheader('Elbow Method')
             sse = []
-            silhouette_scores = []
+            silhouette_scores = []  
             k_range = range(2, 11)
             for k in k_range:
                 kmeans = KMeans(n_clusters=k, random_state=0)
@@ -171,6 +171,29 @@ if menu == "Home":
             st.write(cluster_summary)
 
 #boleheditkebawah
+            import pandas as pd
+import streamlit as st
+
+# Contoh data hasil clustering
+data = {
+    "ID Customer": [101, 102, 103, 104, 105],
+    "Cluster": [1, 2, 1, 3, 2],
+    "Treatment": [
+        "Loyalty Program",
+        "Targeted Discount",
+        "Loyalty Program",
+        "Re-engagement Campaign",
+        "Targeted Discount",
+    ],
+}
+
+df = pd.DataFrame(data)
+df.insert(0, "No", range(1, len(df) + 1))  # Menambahkan kolom No
+
+st.title("Validasi Clustering")
+st.write("Tabel ini menunjukkan hasil clustering beserta treatment yang diberikan untuk setiap customer.")
+st.dataframe(df, use_container_width=True)
+
 
             # Customer Segmentation by Cluster
             st.subheader('Customer Segmentation by Cluster')
