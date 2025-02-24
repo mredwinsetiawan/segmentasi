@@ -181,19 +181,20 @@ if menu == "Home":
             
             # Input pencarian Customer ID
             customer_id_input = st.text_input("Masukkan Customer ID untuk melihat Cluster:")
-            if customer_id_input:
-                try:
-                    customer_id_int = int(customer_id_input)  # Pastikan input dalam bentuk angka
-                    customer_info = rfm[rfm['CustomerID'] == customer_id_int]
-                    if not customer_info.empty:
-                        st.write("Informasi Customer:")
-                        st.dataframe(customer_info)
-                    else:
-                        st.warning("Customer ID tidak ditemukan.")
-                except ValueError:
-                    st.error("Harap masukkan angka yang valid untuk Customer ID.")
             
-                        
+            if customer_id_input:
+                # Pastikan Customer ID dalam dataset bertipe string
+                rfm['CustomerID'] = rfm['CustomerID'].astype(str)
+                
+                # Filter data berdasarkan Customer ID yang dimasukkan
+                customer_info = rfm[rfm['CustomerID'] == customer_id_input]
+                
+                if not customer_info.empty:
+                    st.write("Informasi Customer:")
+                    st.dataframe(customer_info)
+                else:
+                    st.warning("Customer ID tidak ditemukan. Pastikan ID sudah benar.")
+
 
             # Customer Segmentation by Cluster
             st.subheader('Customer Segmentation by Cluster')
