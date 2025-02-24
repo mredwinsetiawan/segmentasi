@@ -178,10 +178,6 @@ if menu == "Home":
             # Input pencarian Customer ID
             customer_id_input = st.text_input("Masukkan Customer ID untuk melihat Cluster:")
             
-            # Menampilkan tabel dengan informasi cluster
-            st.write("Berikut adalah daftar customer beserta cluster dan segmentasi mereka:")
-            st.dataframe(rfm[['CustomerID', 'Recency', 'Frequency', 'Monetary', 'Cluster', 'CustomerSegment']])
-            
             if customer_id_input:
                 # Pastikan Customer ID dalam dataset bertipe string
                 rfm['CustomerID'] = rfm['CustomerID'].astype(str)
@@ -194,6 +190,10 @@ if menu == "Home":
                     st.dataframe(customer_info)
                 else:
                     st.warning("Customer ID tidak ditemukan. Pastikan ID sudah benar.")
+                        
+            # Menampilkan tabel dengan informasi cluster
+            st.write("Berikut adalah daftar customer beserta cluster dan segmentasi mereka:")
+            st.dataframe(rfm[['CustomerID', 'Recency', 'Frequency', 'Monetary', 'Cluster', 'CustomerSegment']])
 
 
             # Customer Segmentation by Cluster
