@@ -174,12 +174,14 @@ if menu == "Home":
 
             # Untuk search berdasarkan id customer
             customer_id_input = st.text_input("Masukkan Customer ID untuk melihat Cluster:")
+            
             if customer_id_input:
-                customer_info = rfm[rfm['CustomerID'] == int(customer_id_input)]
+                customer_info = rfm[rfm['CustomerID'].astype(str) == customer_id_input]
                 if not customer_info.empty:
                     st.write(customer_info)
                 else:
                     st.write("Customer ID tidak ditemukan.")
+
 
             # tabel customer
             st.subheader("Customer Cluster Assignment")
