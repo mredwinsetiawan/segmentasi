@@ -172,6 +172,21 @@ if menu == "Home":
 
 #boleheditkebawah
 
+            # Untuk search berdasarkan id customer
+            customer_id_input = st.text_input("Masukkan Customer ID untuk melihat Cluster:")
+            if customer_id_input:
+                customer_info = rfm[rfm['CustomerID'] == int(customer_id_input)]
+                if not customer_info.empty:
+                    st.write(customer_info)
+                else:
+                    st.write("Customer ID tidak ditemukan.")
+
+            # tabel customer
+            st.subheader("Customer Cluster Assignment")
+            st.write(rfm[['CustomerID', 'Recency', 'Frequency', 'Monetary', 'Cluster', 'CustomerSegment']])
+
+            
+
             # Customer Segmentation by Cluster
             st.subheader('Customer Segmentation by Cluster')
             rfm_avg_sorted = cluster_summary.sort_values(by='RFM Score', ascending=False)  # Urutkan dari tertinggi ke terendah
