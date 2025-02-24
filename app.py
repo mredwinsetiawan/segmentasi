@@ -171,8 +171,6 @@ if menu == "Home":
             st.write(cluster_summary)
 
 #boleheditkebawah
-            import pandas as pd
-import streamlit as st
 
 # Contoh data hasil clustering
 data = {
@@ -194,6 +192,7 @@ st.title("Validasi Clustering")
 st.write("Tabel ini menunjukkan hasil clustering beserta treatment yang diberikan untuk setiap customer.")
 st.dataframe(df, use_container_width=True)
 
+# end validasi
 
             # Customer Segmentation by Cluster
             st.subheader('Customer Segmentation by Cluster')
